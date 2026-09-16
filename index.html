@@ -13,126 +13,135 @@
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-50 text-gray-800 antialiased">
 
-  <!-- شريط الإعلانات العلوي -->
-  <div class="bg-purple-900 text-white text-xs md:text-sm py-2 px-4 text-center font-semibold overflow-hidden whitespace-nowrap">
+  <!-- شريط الإعلانات العلوي المتحرك -->
+  <div class="bg-purple-900 text-white text-[11px] sm:text-xs py-2 px-4 text-center font-semibold overflow-hidden whitespace-nowrap shadow-inner">
     <span class="inline-block animate-pulse">🚚 شحن سريع لجميع مناطق المملكة | 🛡️ ضمان حقيقي واستبدال فوري | 💳 تسهيلات عبر تمارا وتابي</span>
   </div>
 
-  <!-- الهيدر الرئيسي -->
-  <header class="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
-      <button onclick="toggleSidebar()" class="md:hidden text-gray-700 text-xl focus:outline-none">
+  <!-- الهيدر الرئيسي المتجاوب -->
+  <header class="bg-white shadow-sm sticky top-0 z-40 border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-3 sm:gap-4">
+      
+      <!-- زر الثلاث شرطات للقائمة الجانبية على الجوال -->
+      <button onclick="toggleSidebar()" class="lg:hidden text-gray-700 text-xl p-2 rounded-xl hover:bg-gray-100 transition focus:outline-none cursor-pointer">
         <i class="fa-solid fa-bars"></i>
       </button>
 
+      <!-- شعار المتجر -->
       <div class="flex items-center gap-2">
-        <div class="bg-purple-900 text-white p-2 rounded-xl font-black text-xl tracking-wider">العطاوي</div>
-        <span class="hidden sm:inline text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full font-bold">ALATAWI</span>
+        <div class="bg-purple-900 text-white px-3 py-1.5 rounded-xl font-black text-base sm:text-xl tracking-wider shadow-sm">العطاوي</div>
+        <span class="hidden sm:inline text-[10px] bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full font-bold">ALATAWI</span>
       </div>
 
+      <!-- خانة البحث -->
       <div class="flex-1 max-w-xl relative">
-        <input type="text" id="search-input" oninput="searchProducts()" placeholder="ابحث عن جوالك أو إكسسوارك المفضّل..." class="w-full bg-gray-100 border border-transparent focus:border-purple-600 focus:bg-white text-sm rounded-xl py-2.5 pr-4 pl-10 outline-none transition" />
-        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400"></i>
+        <input type="text" id="search-input" oninput="searchProducts()" placeholder="ابحث عن جوالك أو إكسسوارك المفضّل..." class="w-full bg-gray-100 border border-transparent focus:border-purple-600 focus:bg-white text-xs sm:text-sm rounded-xl py-2.5 pr-4 pl-10 outline-none transition shadow-inner" />
+        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400 text-sm"></i>
       </div>
 
-      <div class="flex items-center gap-3">
-        <!-- زر السلة التفاعلي -->
+      <!-- أيقونة السلة وزر الدخول -->
+      <div class="flex items-center gap-2 sm:gap-3">
         <button onclick="openCartModal()" class="relative bg-gray-100 hover:bg-purple-50 text-purple-900 p-2.5 rounded-xl transition cursor-pointer">
-          <i class="fa-solid fa-cart-shopping"></i>
+          <i class="fa-solid fa-cart-shopping text-sm sm:text-base"></i>
           <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
         </button>
-        <!-- زر تسجيل الدخول -->
-        <button onclick="openLoginModal()" class="hidden sm:flex items-center gap-1.5 bg-purple-900 hover:bg-purple-800 text-white px-4 py-2 rounded-xl text-sm font-bold transition cursor-pointer">
+        <button onclick="openLoginModal()" class="hidden sm:flex items-center gap-1.5 bg-purple-900 hover:bg-purple-800 text-white px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer shadow-sm">
           <i class="fa-regular fa-user"></i> دخول (OTP)
         </button>
       </div>
     </div>
   </header>
 
-  <!-- المحتوى الرئيسي -->
-  <div class="max-w-7xl mx-auto px-4 py-6 flex gap-6 items-start">
+  <!-- الخلفية المظلمة للقائمة الجانبية على الجوال -->
+  <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden transition-opacity"></div>
 
-    <!-- القائمة الجانبية -->
-    <aside id="sidebar" class="fixed md:static inset-y-0 right-0 z-50 w-72 bg-white md:bg-transparent shadow-2xl md:shadow-none p-6 md:p-0 transform translate-x-full md:translate-x-0 transition-transform duration-300 overflow-y-auto max-h-[calc(100vh-100px)]">
-      <div class="flex justify-between items-center md:hidden mb-4 pb-2 border-b">
-        <h3 class="font-bold text-lg text-purple-900">الأقسام الرئيسية</h3>
-        <button onclick="toggleSidebar()" class="text-gray-500 text-lg"><i class="fa-solid fa-xmark"></i></button>
+  <!-- المحتوى الرئيسي للمتجر -->
+  <div class="max-w-7xl mx-auto px-4 py-6 flex gap-8 items-start relative">
+
+    <!-- القائمة الجانبية للأقسام (تتجاوب تلقائياً مع الشاشات) -->
+    <aside id="sidebar" class="fixed lg:static top-0 right-0 bottom-0 z-50 w-72 lg:w-64 bg-white lg:bg-transparent shadow-2xl lg:shadow-none p-6 lg:p-0 transform translate-x-full lg:translate-x-0 transition-transform duration-300 overflow-y-auto shrink-0">
+      <div class="flex justify-between items-center lg:hidden mb-4 pb-3 border-b border-gray-100">
+        <h3 class="font-black text-base text-purple-900 flex items-center gap-2"><i class="fa-solid fa-list"></i> الأقسام الرئيسية</h3>
+        <button onclick="toggleSidebar()" class="text-gray-400 hover:text-gray-600 text-lg cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-        <h3 class="font-black text-gray-900 mb-3 text-sm pb-2 border-b border-gray-100 flex items-center gap-2">
+        <h3 class="hidden lg:flex font-black text-gray-900 mb-3 text-sm pb-2 border-b border-gray-100 items-center gap-2">
           <i class="fa-solid fa-list text-purple-900"></i> أقسام المتجر
         </h3>
-        <ul class="space-y-1.5 text-sm font-semibold">
-          <li><a href="#" onclick="filterCategory('all')" class="category-link flex items-center justify-between p-2.5 rounded-xl bg-purple-50 text-purple-900 transition"><span>جميع المنتجات</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
-          <li><a href="#" onclick="filterCategory('iphone')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>إكسسوارات آيفون</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
-          <li><a href="#" onclick="filterCategory('offers')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-red-600 transition"><span>عروض من 1 إلى 9 ريال</span> <span class="bg-red-100 text-red-600 text-[10px] px-1.5 py-0.5 rounded">حصري</span></a></li>
-          <li><a href="#" onclick="filterCategory('smart')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>الأجهزة الذكية والجوالات</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
-          <li><a href="#" onclick="filterCategory('bundles')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>بكجات وحمايات الشاشة</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
-          <li><a href="#" onclick="filterCategory('chargers')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>بطاريات وكوابل وشواحن</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
-          <li><a href="#" onclick="filterCategory('audio')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>الصوتيات والسماعات</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
-          <li><a href="#" onclick="filterCategory('watches')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>الساعات الذكية والأساور</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
-          <li><a href="#" onclick="filterCategory('car')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>ملحقات السيارة والاستندات</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
+        <ul class="space-y-1.5 text-xs sm:text-sm font-semibold">
+          <li><a href="#" onclick="filterCategory('all')" class="category-link flex items-center justify-between p-2.5 rounded-xl bg-purple-50 text-purple-900 transition"><span>جميع المنتجات</span> <i class="fa-solid fa-chevron-left text-[10px]"></i></a></li>
+          <li><a href="#" onclick="filterCategory('iphone')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>إكسسوارات آيفون</span> <i class="fa-solid fa-chevron-left text-[10px]"></i></a></li>
+          <li><a href="#" onclick="filterCategory('offers')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-red-600 transition"><span>عروض من 1 إلى 9 ريال</span> <span class="bg-red-100 text-red-600 text-[9px] px-1.5 py-0.5 rounded font-bold">حصري</span></a></li>
+          <li><a href="#" onclick="filterCategory('smart')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>الأجهزة الذكية والجوالات</span> <i class="fa-solid fa-chevron-left text-[10px]"></i></a></li>
+          <li><a href="#" onclick="filterCategory('bundles')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>بكجات وحمايات الشاشة</span> <i class="fa-solid fa-chevron-left text-[10px]"></i></a></li>
+          <li><a href="#" onclick="filterCategory('chargers')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>بطاريات وكوابل وشواحن</span> <i class="fa-solid fa-chevron-left text-[10px]"></i></a></li>
+          <li><a href="#" onclick="filterCategory('audio')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>الصوتيات والسماعات</span> <i class="fa-solid fa-chevron-left text-[10px]"></i></a></li>
+          <li><a href="#" onclick="filterCategory('watches')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>الساعات الذكية والأساور</span> <i class="fa-solid fa-chevron-left text-[10px]"></i></a></li>
+          <li><a href="#" onclick="filterCategory('car')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>ملحقات السيارة والاستندات</span> <i class="fa-solid fa-chevron-left text-[10px]"></i></a></li>
         </ul>
       </div>
     </aside>
 
-    <!-- المحتوى والبانرات -->
-    <main class="flex-1">
-      <div class="mb-8">
-        <div class="flex gap-4 overflow-x-auto no-scrollbar snap-x pb-4">
-          <div class="min-w-[300px] md:min-w-[48%] flex-1 bg-gradient-to-l from-purple-900 to-indigo-800 text-white rounded-3xl p-6 shadow-lg snap-start flex items-center justify-between relative overflow-hidden">
+    <!-- منطقة عرض المنتجات واللافتات -->
+    <main class="flex-1 w-full min-w-0">
+      
+      <!-- لافتات العروض الترويجية -->
+      <div class="mb-6 sm:mb-8">
+        <div class="flex gap-4 overflow-x-auto no-scrollbar snap-x pb-2">
+          <div class="min-w-[280px] sm:min-w-[340px] md:min-w-[48%] flex-1 bg-gradient-to-l from-purple-900 to-indigo-800 text-white rounded-3xl p-5 sm:p-6 shadow-md snap-start flex items-center justify-between relative overflow-hidden">
             <div class="z-10">
-              <span class="bg-amber-400 text-purple-950 text-xs font-black px-2.5 py-1 rounded-full">عروض الكبرى</span>
-              <h2 class="text-xl md:text-2xl font-black mt-3">تشكيلة جوالات حديثة وبأسعار مذهلة</h2>
-              <p class="text-xs text-purple-200 mt-1">آيفون، سامسونج، ردمي، هواوي بضمان حقيقي</p>
-              <button onclick="filterCategory('smart')" class="mt-4 bg-white text-purple-900 text-xs font-bold px-4 py-2 rounded-xl shadow hover:bg-gray-100 transition cursor-pointer">تسوق العروض</button>
+              <span class="bg-amber-400 text-purple-950 text-[10px] font-black px-2.5 py-1 rounded-full">عروض الكبرى</span>
+              <h2 class="text-base sm:text-xl font-black mt-2 sm:mt-3">تشكيلة جوالات حديثة وبأسعار مذهلة</h2>
+              <p class="text-[11px] sm:text-xs text-purple-200 mt-1">آيفون، سامسونج، ردمي، هواوي بضمان حقيقي</p>
+              <button onclick="filterCategory('smart')" class="mt-3 bg-white text-purple-900 text-xs font-bold px-3.5 py-2 rounded-xl shadow hover:bg-gray-100 transition cursor-pointer">تسوق العروض</button>
             </div>
-            <i class="fa-solid fa-mobile-screen-button text-purple-700/30 text-8xl absolute -bottom-4 -left-4"></i>
+            <i class="fa-solid fa-mobile-screen-button text-purple-700/30 text-7xl sm:text-8xl absolute -bottom-4 -left-4"></i>
           </div>
-          <div class="min-w-[300px] md:min-w-[48%] flex-1 bg-gradient-to-l from-gray-900 to-purple-950 text-white rounded-3xl p-6 shadow-lg snap-start flex items-center justify-between relative overflow-hidden">
+          <div class="min-w-[280px] sm:min-w-[340px] md:min-w-[48%] flex-1 bg-gradient-to-l from-gray-900 to-purple-950 text-white rounded-3xl p-5 sm:p-6 shadow-md snap-start flex items-center justify-between relative overflow-hidden">
             <div class="z-10">
-              <span class="bg-red-500 text-white text-xs font-black px-2.5 py-1 rounded-full">تصفية سريعة</span>
-              <h2 class="text-xl md:text-2xl font-black mt-3">عروض من 1 إلى 9 ريال فقط!</h2>
-              <p class="text-xs text-gray-300 mt-1">كوابل، إكسسوارات، وحمايات بأسعار رمزية</p>
-              <button onclick="filterCategory('offers')" class="mt-4 bg-red-600 text-white text-xs font-bold px-4 py-2 rounded-xl shadow hover:bg-red-500 transition cursor-pointer">اكتشف المنتجات</button>
+              <span class="bg-red-500 text-white text-[10px] font-black px-2.5 py-1 rounded-full">تصفية سريعة</span>
+              <h2 class="text-base sm:text-xl font-black mt-2 sm:mt-3">عروض من 1 إلى 9 ريال فقط!</h2>
+              <p class="text-[11px] sm:text-xs text-gray-300 mt-1">كوابل، إكسسوارات، وحمايات بأسعار رمزية</p>
+              <button onclick="filterCategory('offers')" class="mt-3 bg-red-600 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow hover:bg-red-500 transition cursor-pointer">اكتشف المنتجات</button>
             </div>
-            <i class="fa-solid fa-tags text-gray-800 text-8xl absolute -bottom-4 -left-4"></i>
+            <i class="fa-solid fa-tags text-gray-800 text-7xl sm:text-8xl absolute -bottom-4 -left-4"></i>
           </div>
         </div>
       </div>
 
-      <div class="flex justify-between items-center mb-6">
-        <h1 id="section-title" class="text-xl font-black text-gray-900">جميع منتجات المتجر المتاحة</h1>
-        <span id="product-count" class="text-xs font-bold bg-purple-100 text-purple-800 px-3 py-1.5 rounded-xl">مخزون متوفر</span>
+      <!-- العنوان وعدد المنتجات -->
+      <div class="flex justify-between items-center mb-4 sm:mb-6">
+        <h1 id="section-title" class="text-base sm:text-xl font-black text-gray-900">جميع منتجات المتجر المتاحة</h1>
+        <span id="product-count" class="text-[11px] sm:text-xs font-bold bg-purple-100 text-purple-800 px-3 py-1.5 rounded-xl">مخزون متوفر</span>
       </div>
 
-      <!-- شبكة المنتجات -->
-      <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+      <!-- شبكة المنتجات (متجاوبة تماماً: عمودين على الجوال، 3 إلى 4 أعمدة على اللابتوب) -->
+      <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4"></div>
+
     </main>
+
   </div>
 
-  <!-- نافذة السلة الجانبية التفاعلية -->
+  <!-- نافذة السلة الجانبية (Drawer) -->
   <div id="cart-drawer" class="fixed inset-0 bg-black/50 z-50 hidden flex justify-end">
     <div class="w-full max-w-md bg-white h-full shadow-2xl p-6 flex flex-col justify-between transform transition-transform">
       <div>
         <div class="flex justify-between items-center pb-4 border-b">
-          <h2 class="font-black text-lg text-purple-900 flex items-center gap-2"><i class="fa-solid fa-cart-shopping"></i> سلة المشتريات</h2>
-          <button onclick="closeCartModal()" class="text-gray-400 hover:text-gray-600 text-xl"><i class="fa-solid fa-xmark"></i></button>
+          <h2 class="font-black text-base sm:text-lg text-purple-900 flex items-center gap-2"><i class="fa-solid fa-cart-shopping"></i> سلة المشتريات</h2>
+          <button onclick="closeCartModal()" class="text-gray-400 hover:text-gray-600 text-xl cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div id="cart-items-container" class="divide-y divide-gray-100 overflow-y-auto max-h-[50vh] my-4">
-          <!-- المنتجات المضافة تظهر هنا -->
-        </div>
+        <div id="cart-items-container" class="divide-y divide-gray-100 overflow-y-auto max-h-[50vh] my-4"></div>
       </div>
       <div class="border-t pt-4">
-        <div class="flex justify-between font-bold text-sm mb-2">
+        <div class="flex justify-between font-bold text-sm mb-3">
           <span>المجموع الكلي:</span>
-          <span id="cart-total-price" class="text-purple-900 text-lg">0 ريال</span>
+          <span id="cart-total-price" class="text-purple-900 text-base sm:text-lg">0 ريال</span>
         </div>
-        <a href="checkout.html" class="block text-center w-full bg-purple-900 hover:bg-purple-800 text-white font-bold py-3 rounded-xl transition shadow-sm mb-2">إتمام عملية الشراء</a>
-        <button onclick="closeCartModal()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 rounded-xl transition">مواصلة التسوق</button>
+        <a href="checkout.html" class="block text-center w-full bg-purple-900 hover:bg-purple-800 text-white font-bold py-3 rounded-xl transition shadow-sm mb-2 text-sm">إتمام عملية الشراء</a>
+        <button onclick="closeCartModal()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 rounded-xl transition text-sm cursor-pointer">مواصلة التسوق</button>
       </div>
     </div>
   </div>
@@ -140,17 +149,18 @@
   <!-- نافذة تسجيل الدخول (OTP) -->
   <div id="login-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl text-center relative">
-      <button onclick="closeLoginModal()" class="absolute top-4 left-4 text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <button onclick="closeLoginModal()" class="absolute top-4 left-4 text-gray-400 hover:text-gray-600 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
       <div class="bg-purple-100 text-purple-900 w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl font-black">
         <i class="fa-regular fa-user"></i>
       </div>
-      <h3 class="font-black text-xl text-gray-900 mb-1">تسجيل الدخول أو إنشاء حساب</h3>
+      <h3 class="font-black text-lg sm:text-xl text-gray-900 mb-1">تسجيل الدخول أو إنشاء حساب</h3>
       <p class="text-xs text-gray-500 mb-6">أدخل رقم جوالك ليصلك رمز التحقق (OTP)</p>
-      <input type="tel" placeholder="05xxxxxxxx" class="w-full bg-gray-100 border border-transparent focus:border-purple-600 focus:bg-white text-center text-lg font-bold rounded-xl py-3 outline-none mb-4" />
-      <button onclick="alert('تم إرسال رمز التحقق بنجاح إلى جوالك!'); closeLoginModal();" class="w-full bg-purple-900 hover:bg-purple-800 text-white font-bold py-3 rounded-xl transition shadow-sm">إرسال رمز التحقق</button>
+      <input type="tel" placeholder="05xxxxxxxx" class="w-full bg-gray-100 border border-transparent focus:border-purple-600 focus:bg-white text-center text-base font-bold rounded-xl py-3 outline-none mb-4" />
+      <button onclick="alert('تم إرسال رمز التحقق بنجاح إلى جوالك!'); closeLoginModal();" class="w-full bg-purple-900 hover:bg-purple-800 text-white font-bold py-3 rounded-xl transition shadow-sm text-sm cursor-pointer">إرسال رمز التحقق</button>
     </div>
   </div>
 
+  <!-- استدعاء ملف المنتجات والسكربتات البرمجية -->
   <script src="products.js"></script>
   <script>
     let cart = [];
@@ -159,25 +169,25 @@
       const grid = document.getElementById('products-grid');
       grid.innerHTML = '';
       if(productsToRender.length === 0) {
-        grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500 font-bold">لا توجد منتجات مطابقة.</div>`;
+        grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500 font-bold text-sm">لا توجد منتجات مطابقة في هذا القسم حالياً.</div>`;
         return;
       }
       productsToRender.forEach(p => {
         grid.innerHTML += `
-          <div class="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-md transition group">
+          <div class="bg-white rounded-2xl p-2.5 sm:p-3 shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-md transition group">
             <div>
-              <div class="relative bg-gray-50 rounded-xl overflow-hidden mb-3 aspect-square flex items-center justify-center">
-                <span class="absolute top-2 right-2 bg-purple-900 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">${p.badge}</span>
+              <div class="relative bg-gray-50 rounded-xl overflow-hidden mb-2.5 aspect-square flex items-center justify-center">
+                <span class="absolute top-2 right-2 bg-purple-900 text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full">${p.badge}</span>
                 <img src="${p.image}" alt="${p.name}" class="object-cover h-full w-full group-hover:scale-105 transition duration-300">
               </div>
-              <h3 class="font-bold text-xs md:text-sm text-gray-900 line-clamp-2 mb-2">${p.name}</h3>
+              <h3 class="font-bold text-xs sm:text-sm text-gray-900 line-clamp-2 mb-2">${p.name}</h3>
             </div>
             <div>
-              <div class="flex items-center gap-2 mb-3">
-                <span class="text-purple-900 font-black text-sm md:text-base">${p.price} ريال</span>
-                <span class="text-gray-400 line-through text-xs">${p.oldPrice} ريال</span>
+              <div class="flex items-center gap-1.5 sm:gap-2 mb-2.5">
+                <span class="text-purple-900 font-black text-xs sm:text-base">${p.price} ريال</span>
+                <span class="text-gray-400 line-through text-[10px] sm:text-xs">${p.oldPrice} ريال</span>
               </div>
-              <button onclick="addToCart(${p.id})" class="w-full bg-purple-900 hover:bg-purple-800 text-white text-xs font-bold py-2 rounded-xl transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
+              <button onclick="addToCart(${p.id})" class="w-full bg-purple-900 hover:bg-purple-800 text-white text-[11px] sm:text-xs font-bold py-2 rounded-xl transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
                 <i class="fa-solid fa-cart-plus"></i> أضف للسلة
               </button>
             </div>
@@ -196,7 +206,6 @@
         cart.push({...product, qty: 1});
       }
       updateCartUI();
-      // تم إلغاء فتح السلة التلقائي هنا بناءً على طلبك، سيتم فقط تحديث العداد بصمت
     }
 
     function updateCartUI() {
@@ -209,7 +218,7 @@
 
       container.innerHTML = '';
       if(cart.length === 0) {
-        container.innerHTML = `<div class="text-center py-8 text-gray-400 text-sm">سلة المشتريات فارغة حالياً</div>`;
+        container.innerHTML = `<div class="text-center py-8 text-gray-400 text-xs sm:text-sm">سلة المشتريات فارغة حالياً</div>`;
         totalPriceEl.innerText = '0 ريال';
         return;
       }
@@ -260,7 +269,8 @@
         renderProducts(filtered);
         document.getElementById('section-title').innerText = "منتجات القسم المختار";
       }
-      if(window.innerWidth < 768) { toggleSidebar(); }
+      // إغلاق القائمة الجانبية تلقائياً على الجوال عند اختيار قسم
+      if(window.innerWidth < 1024) { toggleSidebar(); }
     }
 
     function searchProducts() {
@@ -270,8 +280,14 @@
       document.getElementById('section-title').innerText = `نتائج البحث عن: "${query}"`;
     }
 
-    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('translate-x-full'); }
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      sidebar.classList.toggle('translate-x-full');
+      overlay.classList.toggle('hidden');
+    }
 
+    // التشغيل الأولي
     renderProducts(allProducts);
   </script>
 </body>
