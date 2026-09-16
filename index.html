@@ -15,7 +15,7 @@
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-  <!-- شريط الإعلانات العلوي المتحرك -->
+  <!-- شريط الإعلانات العلوي -->
   <div class="bg-purple-900 text-white text-xs md:text-sm py-2 px-4 text-center font-semibold overflow-hidden whitespace-nowrap">
     <span class="inline-block animate-pulse">🚚 شحن سريع لجميع مناطق المملكة | 🛡️ ضمان حقيقي واستبدال فوري | 💳 تسهيلات عبر تمارا وتابي</span>
   </div>
@@ -38,11 +38,13 @@
       </div>
 
       <div class="flex items-center gap-3">
-        <button class="relative bg-gray-100 hover:bg-purple-50 text-purple-900 p-2.5 rounded-xl transition">
+        <!-- زر السلة التفاعلي -->
+        <button onclick="openCartModal()" class="relative bg-gray-100 hover:bg-purple-50 text-purple-900 p-2.5 rounded-xl transition cursor-pointer">
           <i class="fa-solid fa-cart-shopping"></i>
-          <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">عربة</span>
+          <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
         </button>
-        <button class="hidden sm:flex items-center gap-1.5 bg-purple-900 hover:bg-purple-800 text-white px-4 py-2 rounded-xl text-sm font-bold transition">
+        <!-- زر تسجيل الدخول -->
+        <button onclick="openLoginModal()" class="hidden sm:flex items-center gap-1.5 bg-purple-900 hover:bg-purple-800 text-white px-4 py-2 rounded-xl text-sm font-bold transition cursor-pointer">
           <i class="fa-regular fa-user"></i> دخول (OTP)
         </button>
       </div>
@@ -52,7 +54,7 @@
   <!-- المحتوى الرئيسي -->
   <div class="max-w-7xl mx-auto px-4 py-6 flex gap-6 items-start">
 
-    <!-- القائمة الجانبية للأقسام -->
+    <!-- القائمة الجانبية -->
     <aside id="sidebar" class="fixed md:static inset-y-0 right-0 z-50 w-72 bg-white md:bg-transparent shadow-2xl md:shadow-none p-6 md:p-0 transform translate-x-full md:translate-x-0 transition-transform duration-300 overflow-y-auto max-h-[calc(100vh-100px)]">
       <div class="flex justify-between items-center md:hidden mb-4 pb-2 border-b">
         <h3 class="font-bold text-lg text-purple-900">الأقسام الرئيسية</h3>
@@ -77,10 +79,8 @@
       </div>
     </aside>
 
-    <!-- المحتوى واللافتات الترويجية -->
+    <!-- المحتوى والبانرات -->
     <main class="flex-1">
-      
-      <!-- لافتات العروض الترويجية بالتمرير الأفقي -->
       <div class="mb-8">
         <div class="flex gap-4 overflow-x-auto no-scrollbar snap-x pb-4">
           <div class="min-w-[300px] md:min-w-[48%] flex-1 bg-gradient-to-l from-purple-900 to-indigo-800 text-white rounded-3xl p-6 shadow-lg snap-start flex items-center justify-between relative overflow-hidden">
@@ -104,35 +104,64 @@
         </div>
       </div>
 
-      <!-- عنوان القسم النشط -->
       <div class="flex justify-between items-center mb-6">
         <h1 id="section-title" class="text-xl font-black text-gray-900">جميع منتجات المتجر المتاحة</h1>
         <span id="product-count" class="text-xs font-bold bg-purple-100 text-purple-800 px-3 py-1.5 rounded-xl">مخزون متوفر</span>
       </div>
 
       <!-- شبكة المنتجات -->
-      <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-        <!-- يتم تعبئة المنتجات تلقائياً من ملف products.js -->
-      </div>
-
+      <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
     </main>
-
   </div>
 
-  <!-- ربط ملف المنتجات الخارجي -->
+  <!-- نافذة السلة الجانبية التفاعلية -->
+  <div id="cart-drawer" class="fixed inset-0 bg-black/50 z-50 hidden flex justify-end">
+    <div class="w-full max-w-md bg-white h-full shadow-2xl p-6 flex flex-col justify-between transform transition-transform">
+      <div>
+        <div class="flex justify-between items-center pb-4 border-b">
+          <h2 class="font-black text-lg text-purple-900 flex items-center gap-2"><i class="fa-solid fa-cart-shopping"></i> سلة المشتريات</h2>
+          <button onclick="closeCartModal()" class="text-gray-400 hover:text-gray-600 text-xl"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="cart-items-container" class="divide-y divide-gray-100 overflow-y-auto max-h-[50vh] my-4">
+          <!-- المنتجات المضافة تظهر هنا -->
+        </div>
+      </div>
+      <div class="border-t pt-4">
+        <div class="flex justify-between font-bold text-sm mb-2">
+          <span>المجموع الكلي:</span>
+          <span id="cart-total-price" class="text-purple-900 text-lg">0 ريال</span>
+        </div>
+        <a href="checkout.html" class="block text-center w-full bg-purple-900 hover:bg-purple-800 text-white font-bold py-3 rounded-xl transition shadow-sm mb-2">إتمام عملية الشراء</a>
+        <button onclick="closeCartModal()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 rounded-xl transition">مواصلة التسوق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة تسجيل الدخول (OTP) -->
+  <div id="login-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl text-center relative">
+      <button onclick="closeLoginModal()" class="absolute top-4 left-4 text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <div class="bg-purple-100 text-purple-900 w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl font-black">
+        <i class="fa-regular fa-user"></i>
+      </div>
+      <h3 class="font-black text-xl text-gray-900 mb-1">تسجيل الدخول أو إنشاء حساب</h3>
+      <p class="text-xs text-gray-500 mb-6">أدخل رقم جوالك ليصلك رمز التحقق (OTP)</p>
+      <input type="tel" placeholder="05xxxxxxxx" class="w-full bg-gray-100 border border-transparent focus:border-purple-600 focus:bg-white text-center text-lg font-bold rounded-xl py-3 outline-none mb-4" />
+      <button onclick="alert('تم إرسال رمز التحقق بنجاح إلى جوالك!'); closeLoginModal();" class="w-full bg-purple-900 hover:bg-purple-800 text-white font-bold py-3 rounded-xl transition shadow-sm">إرسال رمز التحقق</button>
+    </div>
+  </div>
+
   <script src="products.js"></script>
-  
-  <!-- سكربت التشغيل والتفاعل -->
   <script>
+    let cart = [];
+
     function renderProducts(productsToRender) {
       const grid = document.getElementById('products-grid');
       grid.innerHTML = '';
-      
       if(productsToRender.length === 0) {
-        grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500 font-bold">لا توجد منتجات مطابقة للبحث أو القسم حالياً.</div>`;
+        grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500 font-bold">لا توجد منتجات مطابقة.</div>`;
         return;
       }
-
       productsToRender.forEach(p => {
         grid.innerHTML += `
           <div class="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-md transition group">
@@ -148,16 +177,79 @@
                 <span class="text-purple-900 font-black text-sm md:text-base">${p.price} ريال</span>
                 <span class="text-gray-400 line-through text-xs">${p.oldPrice} ريال</span>
               </div>
-              <button class="w-full bg-purple-900 hover:bg-purple-800 text-white text-xs font-bold py-2 rounded-xl transition flex items-center justify-center gap-1.5 shadow-sm">
+              <button onclick="addToCart(${p.id})" class="w-full bg-purple-900 hover:bg-purple-800 text-white text-xs font-bold py-2 rounded-xl transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
                 <i class="fa-solid fa-cart-plus"></i> أضف للسلة
               </button>
             </div>
           </div>
         `;
       });
-      
       document.getElementById('product-count').innerText = `عدد المنتجات: ${productsToRender.length}`;
     }
+
+    function addToCart(id) {
+      const product = allProducts.find(p => p.id === id);
+      const existing = cart.find(item => item.id === id);
+      if(existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({...product, qty: 1});
+      }
+      updateCartUI();
+      openCartModal();
+    }
+
+    function updateCartUI() {
+      const badge = document.getElementById('cart-badge');
+      const container = document.getElementById('cart-items-container');
+      const totalPriceEl = document.getElementById('cart-total-price');
+      
+      const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+      badge.innerText = totalCount;
+
+      container.innerHTML = '';
+      if(cart.length === 0) {
+        container.innerHTML = `<div class="text-center py-8 text-gray-400 text-sm">سلة المشتريات فارغة حالياً</div>`;
+        totalPriceEl.innerText = '0 ريال';
+        return;
+      }
+
+      let total = 0;
+      cart.forEach(item => {
+        total += item.price * item.qty;
+        container.innerHTML += `
+          <div class="py-3 flex items-center justify-between gap-3">
+            <img src="${item.image}" class="w-12 h-12 object-cover rounded-xl bg-gray-50" />
+            <div class="flex-1">
+              <h4 class="font-bold text-xs text-gray-900 line-clamp-1">${item.name}</h4>
+              <span class="text-purple-900 font-bold text-xs">${item.price} ريال</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="changeQty(${item.id}, -1)" class="w-6 h-6 bg-gray-100 rounded-lg text-xs font-bold">-</button>
+              <span class="text-xs font-bold">${item.qty}</span>
+              <button onclick="changeQty(${item.id}, 1)" class="w-6 h-6 bg-gray-100 rounded-lg text-xs font-bold">+</button>
+            </div>
+          </div>
+        `;
+      });
+      totalPriceEl.innerText = `${total} ريال`;
+    }
+
+    function changeQty(id, delta) {
+      const item = cart.find(i => i.id === id);
+      if(item) {
+        item.qty += delta;
+        if(item.qty <= 0) {
+          cart = cart.filter(i => i.id !== id);
+        }
+      }
+      updateCartUI();
+    }
+
+    function openCartModal() { document.getElementById('cart-drawer').classList.remove('hidden'); }
+    function closeCartModal() { document.getElementById('cart-drawer').classList.add('hidden'); }
+    function openLoginModal() { document.getElementById('login-modal').classList.remove('hidden'); }
+    function closeLoginModal() { document.getElementById('login-modal').classList.add('hidden'); }
 
     function filterCategory(category) {
       if(category === 'all') {
@@ -168,9 +260,7 @@
         renderProducts(filtered);
         document.getElementById('section-title').innerText = "منتجات القسم المختار";
       }
-      if(window.innerWidth < 768) {
-        toggleSidebar();
-      }
+      if(window.innerWidth < 768) { toggleSidebar(); }
     }
 
     function searchProducts() {
@@ -180,12 +270,8 @@
       document.getElementById('section-title').innerText = `نتائج البحث عن: "${query}"`;
     }
 
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      sidebar.classList.toggle('translate-x-full');
-    }
+    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('translate-x-full'); }
 
-    // التشغيل الأولي لعرض كل المنتجات
     renderProducts(allProducts);
   </script>
 </body>
