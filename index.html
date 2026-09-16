@@ -9,7 +9,6 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap');
     body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; }
-    /* إخفاء شريط التمرير للبانرات الأفقية مع الحفاظ على العمل */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
@@ -24,28 +23,24 @@
   <!-- الهيدر الرئيسي -->
   <header class="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100">
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
-      <!-- زر القائمة الجانبية للشاشات الصغيرة أو التحكم -->
       <button onclick="toggleSidebar()" class="md:hidden text-gray-700 text-xl focus:outline-none">
         <i class="fa-solid fa-bars"></i>
       </button>
 
-      <!-- شعار المتجر -->
       <div class="flex items-center gap-2">
         <div class="bg-purple-900 text-white p-2 rounded-xl font-black text-xl tracking-wider">العطاوي</div>
         <span class="hidden sm:inline text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full font-bold">ALATAWI</span>
       </div>
 
-      <!-- مربع البحث السريع -->
       <div class="flex-1 max-w-xl relative">
-        <input type="text" placeholder="ابحث في أكثر من 500 منتج ذكي (اكسسوارات، شواحن، ساعات...)" class="w-full bg-gray-100 border border-transparent focus:border-purple-600 focus:bg-white text-sm rounded-xl py-2.5 pr-4 pl-10 outline-none transition" />
+        <input type="text" id="search-input" oninput="searchProducts()" placeholder="ابحث عن جوالك أو إكسسوارك المفضّل..." class="w-full bg-gray-100 border border-transparent focus:border-purple-600 focus:bg-white text-sm rounded-xl py-2.5 pr-4 pl-10 outline-none transition" />
         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400"></i>
       </div>
 
-      <!-- أيقونات التفاعل (السلة والحساب) -->
       <div class="flex items-center gap-3">
         <button class="relative bg-gray-100 hover:bg-purple-50 text-purple-900 p-2.5 rounded-xl transition">
           <i class="fa-solid fa-cart-shopping"></i>
-          <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">3</span>
+          <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">عربة</span>
         </button>
         <button class="hidden sm:flex items-center gap-1.5 bg-purple-900 hover:bg-purple-800 text-white px-4 py-2 rounded-xl text-sm font-bold transition">
           <i class="fa-regular fa-user"></i> دخول (OTP)
@@ -54,10 +49,10 @@
     </div>
   </header>
 
-  <!-- المحتوى الرئيسي (القائمة الجانبية + المنتجات والبانرات) -->
+  <!-- المحتوى الرئيسي -->
   <div class="max-w-7xl mx-auto px-4 py-6 flex gap-6 items-start">
 
-    <!-- القائمة الجانبية للأقسام (مطابقة لمتجر العطاوي تماماً) -->
+    <!-- القائمة الجانبية للأقسام -->
     <aside id="sidebar" class="fixed md:static inset-y-0 right-0 z-50 w-72 bg-white md:bg-transparent shadow-2xl md:shadow-none p-6 md:p-0 transform translate-x-full md:translate-x-0 transition-transform duration-300 overflow-y-auto max-h-[calc(100vh-100px)]">
       <div class="flex justify-between items-center md:hidden mb-4 pb-2 border-b">
         <h3 class="font-bold text-lg text-purple-900">الأقسام الرئيسية</h3>
@@ -70,18 +65,14 @@
         </h3>
         <ul class="space-y-1.5 text-sm font-semibold">
           <li><a href="#" onclick="filterCategory('all')" class="category-link flex items-center justify-between p-2.5 rounded-xl bg-purple-50 text-purple-900 transition"><span>جميع المنتجات</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
-          <li><a href="#" onclick="filterCategory('iphone')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>إكسسوارات آيفون 18</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
+          <li><a href="#" onclick="filterCategory('iphone')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>إكسسوارات آيفون</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
           <li><a href="#" onclick="filterCategory('offers')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-red-600 transition"><span>عروض من 1 إلى 9 ريال</span> <span class="bg-red-100 text-red-600 text-[10px] px-1.5 py-0.5 rounded">حصري</span></a></li>
-          <li><a href="#" onclick="filterCategory('bundles')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>عروض التجهزة وبكجات الحماية</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
-          <li><a href="#" onclick="filterCategory('garm')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>قرم - GARM</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
-          <li><a href="#" onclick="filterCategory('xwolf')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>منتجات أكس وولف (X-Wolf)</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
-          <li><a href="#" onclick="filterCategory('smart')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>الأجهزة الذكية</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
-          <li><a href="#" onclick="filterCategory('cameras')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>كاميرات المراقبة والداش كام</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
+          <li><a href="#" onclick="filterCategory('smart')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>الأجهزة الذكية والجوالات</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
+          <li><a href="#" onclick="filterCategory('bundles')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>بكجات وحمايات الشاشة</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
           <li><a href="#" onclick="filterCategory('chargers')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>بطاريات وكوابل وشواحن</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
-          <li><a href="#" onclick="filterCategory('audio')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>الصوتيات والسماعات اللاسلكية</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
+          <li><a href="#" onclick="filterCategory('audio')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>الصوتيات والسماعات</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
           <li><a href="#" onclick="filterCategory('watches')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>الساعات الذكية والأساور</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
           <li><a href="#" onclick="filterCategory('car')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>ملحقات السيارة والاستندات</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
-          <li><a href="#" onclick="filterCategory('gaming')" class="category-link flex items-center justify-between p-2.5 rounded-xl hover:bg-gray-50 text-gray-700 transition"><span>ملحقات الألعاب والبيت الذكي</span> <i class="fa-solid fa-chevron-left text-xs"></i></a></li>
         </ul>
       </div>
     </aside>
@@ -89,73 +80,60 @@
     <!-- المحتوى واللافتات الترويجية -->
     <main class="flex-1">
       
-      <!-- لافتات العروض الترويجية بالتمرير الأفقي (Banners Slider) -->
+      <!-- لافتات العروض الترويجية بالتمرير الأفقي -->
       <div class="mb-8">
         <div class="flex gap-4 overflow-x-auto no-scrollbar snap-x pb-4">
-          <!-- بانر 1 -->
           <div class="min-w-[300px] md:min-w-[48%] flex-1 bg-gradient-to-l from-purple-900 to-indigo-800 text-white rounded-3xl p-6 shadow-lg snap-start flex items-center justify-between relative overflow-hidden">
             <div class="z-10">
-              <span class="bg-amber-400 text-purple-950 text-xs font-black px-2.5 py-1 rounded-full">عروض اليوم الوطني</span>
-              <h2 class="text-xl md:text-2xl font-black mt-3">تخفيضات كبرى على إكسسوارات آيفون</h2>
-              <p class="text-xs text-purple-200 mt-1">خصومات تصل إلى 60% لفترة محدودة</p>
-              <button class="mt-4 bg-white text-purple-900 text-xs font-bold px-4 py-2 rounded-xl shadow hover:bg-gray-100 transition">تسوق العرض</button>
+              <span class="bg-amber-400 text-purple-950 text-xs font-black px-2.5 py-1 rounded-full">عروض الكبرى</span>
+              <h2 class="text-xl md:text-2xl font-black mt-3">تشكيلة جوالات حديثة وبأسعار مذهلة</h2>
+              <p class="text-xs text-purple-200 mt-1">آيفون، سامسونج، ردمي، هواوي بضمان حقيقي</p>
+              <button onclick="filterCategory('smart')" class="mt-4 bg-white text-purple-900 text-xs font-bold px-4 py-2 rounded-xl shadow hover:bg-gray-100 transition cursor-pointer">تسوق العروض</button>
             </div>
-            <i class="fa-solid fa-bolt text-purple-700/30 text-8xl absolute -bottom-4 -left-4"></i>
+            <i class="fa-solid fa-mobile-screen-button text-purple-700/30 text-8xl absolute -bottom-4 -left-4"></i>
           </div>
-          <!-- بانر 2 -->
           <div class="min-w-[300px] md:min-w-[48%] flex-1 bg-gradient-to-l from-gray-900 to-purple-950 text-white rounded-3xl p-6 shadow-lg snap-start flex items-center justify-between relative overflow-hidden">
             <div class="z-10">
-              <span class="bg-red-500 text-white text-xs font-black px-2.5 py-1 rounded-full">حسومات حصرية</span>
+              <span class="bg-red-500 text-white text-xs font-black px-2.5 py-1 rounded-full">تصفية سريعة</span>
               <h2 class="text-xl md:text-2xl font-black mt-3">عروض من 1 إلى 9 ريال فقط!</h2>
-              <p class="text-xs text-gray-300 mt-1">أقوى صفقات التصفية متوفرة الآن بالموقع</p>
-              <button class="mt-4 bg-red-600 text-white text-xs font-bold px-4 py-2 rounded-xl shadow hover:bg-red-500 transition">اكتشف المنتجات</button>
+              <p class="text-xs text-gray-300 mt-1">كوابل، إكسسوارات، وحمايات بأسعار رمزية</p>
+              <button onclick="filterCategory('offers')" class="mt-4 bg-red-600 text-white text-xs font-bold px-4 py-2 rounded-xl shadow hover:bg-red-500 transition cursor-pointer">اكتشف المنتجات</button>
             </div>
             <i class="fa-solid fa-tags text-gray-800 text-8xl absolute -bottom-4 -left-4"></i>
           </div>
         </div>
       </div>
 
-      <!-- عنوان القسم النشط والعداد -->
+      <!-- عنوان القسم النشط -->
       <div class="flex justify-between items-center mb-6">
-        <h1 id="section-title" class="text-xl font-black text-gray-900">أقوى تشكيلة منتجات ذكية (500+ منتج)</h1>
-        <span class="text-xs font-bold bg-purple-100 text-purple-800 px-3 py-1.5 rounded-xl">متوفر في المخزون</span>
+        <h1 id="section-title" class="text-xl font-black text-gray-900">جميع منتجات المتجر المتاحة</h1>
+        <span id="product-count" class="text-xs font-bold bg-purple-100 text-purple-800 px-3 py-1.5 rounded-xl">مخزون متوفر</span>
       </div>
 
-      <!-- شبكة المنتجات (Products Grid) -->
+      <!-- شبكة المنتجات -->
       <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-        <!-- يتم تعبئة المنتجات تلقائياً عبر سكربت الجافاسكريبت -->
+        <!-- يتم تعبئة المنتجات تلقائياً من ملف products.js -->
       </div>
 
     </main>
 
   </div>
 
-  <!-- سكربت جافاسكريبت لإدارة الأقسام والمنتجات وتوليدها -->
+  <!-- ربط ملف المنتجات الخارجي -->
+  <script src="products.js"></script>
+  
+  <!-- سكربت التشغيل والتفاعل -->
   <script>
-    // قائمة المنتجات الافتراضية الشاملة لجميع أقسام العطاوي
-    const products = [
-      { id: 1, name: "كفر ماج سيف شفاف مقاوم للصدمات - آيفون 15 برو", price: 39, oldPrice: 89, category: "iphone", image: "https://images.unsplash.com/photo-1603313049175-31f24d9c7d42?w=300", badge: "خصم 55%" },
-      { id: 2, name: "بكج حماية متكامل 7 في 1 - GARM", price: 99, oldPrice: 199, category: "bundles", image: "https://images.unsplash.com/photo-1585060544812-6b45742d762f?w=300", badge: "الأكثر مبيعاً" },
-      { id: 3, name: "ساعة ذكية شبيهة أبل الترا مع أسوار إضافية", price: 149, oldPrice: 299, category: "watches", image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300", badge: "توصيل مجاني" },
-      { id: 4, name: "سلك شحن فاست تايب سي إلى تايب سي 1 متر", price: 9, oldPrice: 35, category: "offers", image: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=300", badge: "عرض 9 ريال" },
-      { id: 5, name: "شاحن جداري سريع بتقنية GaN بقوة 65 واط", price: 89, oldPrice: 159, category: "chargers", image: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=300", badge: "جديد" },
-      { id: 6, name: "سماعة بلوتوث لاسلكية عازلة للضوضاء TWS", price: 79, oldPrice: 149, category: "audio", image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=300", badge: "عرض خاص" },
-      { id: 7, name: "قاعدة تثبيت مغناطيسية للجوال في السيارة", price: 29, oldPrice: 60, category: "car", image: "https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=300", badge: "عملي" },
-      { id: 8, name: "زجاج حماية الشاشة اللقافة (مضاد للفضول)", price: 25, oldPrice: 50, category: "iphone", image: "https://images.unsplash.com/photo-1585060544812-6b45742d762f?w=300", badge: "حماية فائقة" }
-    ];
-
-    function renderProducts(filter = 'all') {
+    function renderProducts(productsToRender) {
       const grid = document.getElementById('products-grid');
       grid.innerHTML = '';
       
-      const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
-
-      if(filtered.length === 0) {
-        grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500 font-bold">لا توجد منتجات مطابقة لهذا القسم حالياً، جارٍ إضافة المزيد من منتجات 500+ قريباً!</div>`;
+      if(productsToRender.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500 font-bold">لا توجد منتجات مطابقة للبحث أو القسم حالياً.</div>`;
         return;
       }
 
-      filtered.forEach(p => {
+      productsToRender.forEach(p => {
         grid.innerHTML += `
           <div class="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-md transition group">
             <div>
@@ -177,14 +155,29 @@
           </div>
         `;
       });
+      
+      document.getElementById('product-count').innerText = `عدد المنتجات: ${productsToRender.length}`;
     }
 
     function filterCategory(category) {
-      renderProducts(category);
-      // إغلاق القائمة الجانبية في الشاشات الصغيرة عند اختيار قسم
+      if(category === 'all') {
+        renderProducts(allProducts);
+        document.getElementById('section-title').innerText = "جميع منتجات المتجر المتاحة";
+      } else {
+        const filtered = allProducts.filter(p => p.category === category);
+        renderProducts(filtered);
+        document.getElementById('section-title').innerText = "منتجات القسم المختار";
+      }
       if(window.innerWidth < 768) {
         toggleSidebar();
       }
+    }
+
+    function searchProducts() {
+      const query = document.getElementById('search-input').value.toLowerCase();
+      const matched = allProducts.filter(p => p.name.toLowerCase().includes(query));
+      renderProducts(matched);
+      document.getElementById('section-title').innerText = `نتائج البحث عن: "${query}"`;
     }
 
     function toggleSidebar() {
@@ -192,8 +185,8 @@
       sidebar.classList.toggle('translate-x-full');
     }
 
-    // تشغيل العرض الأولي
-    renderProducts('all');
+    // التشغيل الأولي لعرض كل المنتجات
+    renderProducts(allProducts);
   </script>
 </body>
 </html>
